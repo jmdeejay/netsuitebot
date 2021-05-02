@@ -1,5 +1,6 @@
 # Local application imports
-from .bcolors import *
+from .bcolors import output
+from .bcolors import BColors
 
 
 def log(message, level=""):
