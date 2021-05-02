@@ -1,5 +1,9 @@
+.DS_Store
+.env
 .idea
+.pyc
 __pycache__
+_tmp
 build
 venv
 

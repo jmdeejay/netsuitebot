@@ -79,3 +79,5 @@ At runtime, the bot will check the previous working day & it will either:
   ```
   ./make_netsuitebot.bash
   ```
+- The code is pycodestyle (PEP8 if you use Pycharm) & Flake8 compliant.
+  You may run either of these linters.

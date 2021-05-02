@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+# Standard library imports
+import os
+import re
+
 # Third party imports
 import configparser
 import tkinter as tk
@@ -9,9 +13,9 @@ from PIL import Image, ImageTk
 # Local application imports
 from classes.entry_placeholder import EntryPlaceholder
 from classes.entry_time import EntryTime
-from classes.logs import *
-from classes.tasks import *
-from classes.utilities import *
+import classes.logs as logs
+import classes.tasks as tasks
+import classes.utilities as utilities
 from netsuitebot import try_login
 
 # Consts
@@ -42,7 +46,7 @@ def open_config_file():
     if not os.path.exists(CONFIG_FILE):
         config["Credentials"] = {"Email": "", "Password": ""}
         config["Informations"] = {
-            "Task": get_default_task(),
+            "Task": tasks.get_default_task(),
             "Time": "7:30",
             "Comment": "Standup, analyse, développement"
         }
@@ -51,21 +55,21 @@ def open_config_file():
         config.read(CONFIG_FILE)
 
     try:
-        edit_email.insert(tk.END, decode_base64(config.get("Credentials", "Email")))
-        edit_password.insert(tk.END, secure_decode_base64(config.get("Credentials", "Password")))
+        edit_email.insert(tk.END, utilities.decode_base64(config.get("Credentials", "Email")))
+        edit_password.insert(tk.END, utilities.secure_decode_base64(config.get("Credentials", "Password")))
 
         task_id = config.get("Informations", "Task")
-        if not is_valid_task_id(task_id):
-            task_id = get_default_task()
-        combo_task.current(get_task_index_by_id(task_id))
+        if not tasks.is_valid_task_id(task_id):
+            task_id = tasks.get_default_task()
+        combo_task.current(tasks.get_task_index_by_id(task_id))
         edit_time.insert(tk.END, config.get("Informations", "Time"))
         edit_comment.insert(tk.END, config.get("Informations", "Comment"))
     except configparser.NoOptionError:
-        log_error("Ini file corrupted. Try deleting the " + CONFIG_FILE + " file.")
+        logs.log_error("Ini file corrupted. Try deleting the " + CONFIG_FILE + " file.")
     except UnicodeDecodeError:
-        log_error("Error decoding data. Try recreating the " + CONFIG_FILE + " file.")
-    except binascii.Error:
-        log_error("Error decoding data. Try recreating the " + CONFIG_FILE + " file.")
+        logs.log_error("Error decoding data. Try recreating the " + CONFIG_FILE + " file.")
+    except utilities.binascii.Error:
+        logs.log_error("Error decoding data. Try recreating the " + CONFIG_FILE + " file.")
 
 
 def save_config_file():
@@ -73,15 +77,15 @@ def save_config_file():
         popup("Info", "Email/Password cannot be empty.", 2000)
     elif edit_time.get() == "":
         popup("Info", "Time cannot be empty.", 2000)
-    elif not valid_time(edit_time.get()):
+    elif not utilities.valid_time(edit_time.get()):
         popup("Info", "Time must be in a valid format (7:30).", 2000)
     elif edit_comment.get().strip() == "":
         popup("Info", "Comment cannot be empty.", 2000)
     else:
-        config.set("Credentials", "Email", encode_base64(edit_email.get()))
-        config.set("Credentials", "Password", secure_encode_base64(edit_password.get()))
+        config.set("Credentials", "Email", utilities.encode_base64(edit_email.get()))
+        config.set("Credentials", "Password", utilities.secure_encode_base64(edit_password.get()))
 
-        config.set("Informations", "Task", str(get_task_id_by_index(combo_task.current())))
+        config.set("Informations", "Task", str(tasks.get_task_id_by_index(combo_task.current())))
         config.set("Informations", "Time", edit_time.get())
         config.set("Informations", "Comment", edit_comment.get())
         write_config_file()
@@ -99,7 +103,7 @@ def test_login():
 
 
 def load_image(filepath, width=0, height=0):
-    full_path = resource_path(filepath)
+    full_path = utilities.resource_path(filepath)
     if os.path.exists(full_path):
         image = Image.open(full_path)
         if width > 0 and height > 0:
@@ -162,7 +166,7 @@ if __name__ == "__main__":
     label_time = ttk.Label(frame_infos, text="Time:")
     label_comment = ttk.Label(frame_infos, text="Comment:")
 
-    combo_task = ttk.Combobox(frame_infos, state="readonly", width=15, values=get_tasks_values())
+    combo_task = ttk.Combobox(frame_infos, state="readonly", width=15, values=tasks.get_tasks_values())
     combo_task.current(0)
 
     time_value = tk.StringVar()

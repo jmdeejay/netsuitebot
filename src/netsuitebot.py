@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 
+# Standard library imports
+import json
+import os
+import re
+import sys
+
 # Third party imports
 from bs4 import BeautifulSoup
 import configparser
@@ -7,9 +13,10 @@ import requests
 
 # Local application imports
 import classes.bcolors as bcolors
-from classes.utilities import *
-from classes.logs import *
-from classes.tasks import *
+from classes.bcolors import BColors
+import classes.utilities as utilities
+import classes.logs as logs
+import classes.tasks as tasks
 
 # Consts
 DEV_MODE = False
@@ -33,13 +40,24 @@ session_validation_url = netsuite_base_url + "?script=106&deploy=1"
 
 def printLogo():
     # @formatter:off
-    print(bcolors.output(" _   _        _                _  _        ", BColors.BLUE)  + bcolors.output("______           _   ", BColors.RED))  # nopep8
-    print(bcolors.output("| \ | |      | |              (_)| |       ", BColors.BLUE)  + bcolors.output("| ___ \         | |  ", BColors.RED))  # nopep8
-    print(bcolors.output("|  \| |  ___ | |_  ___  _   _  _ | |_  ___ ", BColors.BLUE)  + bcolors.output("| |_/ /  _____  | |_ ", BColors.RED))  # nopep8
-    print(bcolors.output("| . ` | / _ \| __|/ __|| | | || || __|/ _ \\", BColors.BLUE) + bcolors.output("| ___ \ / ___ \ | __|", BColors.RED))  # nopep8
-    print(bcolors.output("| |\  ||  __/| |_ \__ \| |_| || || |_|  __/", BColors.BLUE)  + bcolors.output("| |_/ /| (ʘ‿ʘ) || |_ ", BColors.RED))  # nopep8
-    print(bcolors.output("\_| \_/ \___| \__||___/ \__,_||_| \__|\___|", BColors.BLUE)  + bcolors.output("\____/  \_____/  \__|", BColors.RED) +  # nopep8
-          " " + bcolors.output(VERSION, BColors.BOLD))
+    ns_line1 = bcolors.output(" _   _        _                _  _        ", BColors.BLUE)  # noqa: W605
+    ns_line2 = bcolors.output("| \ | |      | |              (_)| |       ", BColors.BLUE)  # noqa: W605
+    ns_line3 = bcolors.output("|  \| |  ___ | |_  ___  _   _  _ | |_  ___ ", BColors.BLUE)  # noqa: W605
+    ns_line4 = bcolors.output("| . ` | / _ \| __|/ __|| | | || || __|/ _ \\", BColors.BLUE)  # noqa: W605
+    ns_line5 = bcolors.output("| |\  ||  __/| |_ \__ \| |_| || || |_|  __/", BColors.BLUE)  # noqa: W605
+    ns_line6 = bcolors.output("\_| \_/ \___| \__||___/ \__,_||_| \__|\___|", BColors.BLUE)  # noqa: W605
+    bt_line1 = bcolors.output("______           _   ", BColors.RED) + "\n"  # noqa: W605
+    bt_line2 = bcolors.output("| ___ \         | |  ", BColors.RED) + "\n"  # noqa: W605
+    bt_line3 = bcolors.output("| |_/ /  _____  | |_ ", BColors.RED) + "\n"  # noqa: W605
+    bt_line4 = bcolors.output("| ___ \ / ___ \ | __|", BColors.RED) + "\n"  # noqa: W605
+    bt_line5 = bcolors.output("| |_/ /| (ʘ‿ʘ) || |_ ", BColors.RED) + "\n"  # noqa: W605
+    bt_line6 = bcolors.output("\____/  \_____/  \__|", BColors.RED)  # noqa: W605
+    version = bcolors.output(VERSION, BColors.BOLD)
+
+    print(
+        ns_line1 + bt_line1 + ns_line2 + bt_line2 + ns_line3 + bt_line3 +
+        ns_line4 + bt_line4 + ns_line5 + bt_line5 + ns_line6 + bt_line6 + " " + version
+    )
     # @formatter:on
 
 
@@ -47,7 +65,7 @@ def open_config_file():
     if not os.path.exists(CONFIG_FILE):
         return False
     try:
-        log_info("Reading configs file.")
+        logs.log_info("Reading configs file.")
         config.read(CONFIG_FILE)
         config_email = config.get("Credentials", "Email")
         config_password = config.get("Credentials", "Password")
@@ -55,24 +73,24 @@ def open_config_file():
         config_time = config.get("Informations", "Time")
         config_comment = config.get("Informations", "Comment")
 
-        config["Credentials"]["Email"] = decode_base64(config_email)
-        config["Credentials"]["Password"] = secure_decode_base64(config_password)
+        config["Credentials"]["Email"] = utilities.decode_base64(config_email)
+        config["Credentials"]["Password"] = utilities.secure_decode_base64(config_password)
 
-        if not is_valid_task_id(config_task):
+        if not tasks.is_valid_task_id(config_task):
             return False
-        if config_time == "" or not valid_time(config_time):
+        if config_time == "" or not utilities.valid_time(config_time):
             return False
         if config_comment.strip() == "":
             return False
 
-        log_success("Configs loaded successfully.")
-        log(SMALL_SEPARATOR)
+        logs.log_success("Configs loaded successfully.")
+        logs.log(SMALL_SEPARATOR)
         return True
     except configparser.NoOptionError:
         return False
     except UnicodeDecodeError:
         return False
-    except binascii.Error:
+    except utilities.binascii.Error:
         return False
 
 
@@ -88,7 +106,7 @@ def executeConfigurator():
 
 
 def try_login(email, password, req=None):
-    log_info("Getting SAML response.")
+    logs.log_info("Getting SAML response.")
     data = {
         "UserName": email,
         "Password": password,
@@ -102,21 +120,21 @@ def try_login(email, password, req=None):
     error = page.find("label", id="errorText")
 
     if error is None:
-        log_info("Received SAML response.")
+        logs.log_info("Received SAML response.")
         return page
     else:
-        log_error("Error while getting SAML response.")
+        logs.log_error("Error while getting SAML response.")
         return None
 
 
 def saml_login_authenticate(page):
     try:
-        log_info("Sending SAML response.")
+        logs.log_info("Sending SAML response.")
         saml_response = page.find("input", attrs={"name": "SAMLResponse", "type": "hidden"}).get("value")
         data = {"SAMLResponse": saml_response}
         request = cur_session.post(saml_response_url, data=data)
 
-        log_info("Sending SAML login informations.")
+        logs.log_info("Sending SAML login informations.")
         page_2 = BeautifulSoup(request.content, "html.parser")
         id_provider = page_2.find("input", attrs={"name": "identityProviderId", "type": "hidden"}).get("value")
         comp_id = page_2.find("input", attrs={"name": "c", "type": "hidden"}).get("value")
@@ -135,7 +153,7 @@ def saml_login_authenticate(page):
         cur_session.post(saml_login_url, data=data)
         return comp_id
     except (ValueError, Exception):
-        log_error("Error while sending the SAML login informations.")
+        logs.log_error("Error while sending the SAML login informations.")
         return None
 
 
@@ -149,30 +167,30 @@ def authenticate_with_retries():
             # The first execution of Configurator will create the basic config.ini file.
             executeConfigurator()
             tries += 1
-            log_info("Retrying to open valid configs...")
+            logs.log_info("Retrying to open valid configs...")
         if tries >= max_tries:
-            log_error("Unable to read valid configs.")
+            logs.log_error("Unable to read valid configs.")
             return
 
         login_email = config.get("Credentials", "Email")
         login_password = config.get("Credentials", "Password")
         if tries == 0:
-            log_info("Trying to login...")
+            logs.log_info("Trying to login...")
         else:
-            log_info("Retrying to login...")
+            logs.log_info("Retrying to login...")
         login_result = try_login(login_email, login_password, cur_session)
         if login_result is not None:
             if os.path.exists(COOKIE_FILE) and DEV_MODE:
                 result = "4146758"  # Dev
-                log_info("Loading session " + result + " from cookies.")
+                logs.log_info("Loading session " + result + " from cookies.")
                 load_cookie_file()
-                log_info("Cookies loaded successfully.")
+                logs.log_info("Cookies loaded successfully.")
             else:
                 result = saml_login_authenticate(login_result)
-                log_info("Session " + result + " created by authentification.")
+                logs.log_info("Session " + result + " created by authentification.")
                 if DEV_MODE:
                     save_cookie_file()
-                    log_info("Cookies saved successfully.")
+                    logs.log_info("Cookies saved successfully.")
         else:
             executeConfigurator()
             tries += 1
@@ -217,7 +235,7 @@ def is_time_submitted(time_entries):
     if len(time_entries) < 1:
         return False
 
-    time_entry = time_entries[get_json_key_by_index(time_entries, 0)]
+    time_entry = time_entries[utilities.get_json_key_by_index(time_entries, 0)]
     if "isPendingApprovalFlag" in time_entry and time_entry["isPendingApprovalFlag"] == "T":
         return True
     return False
@@ -226,7 +244,7 @@ def is_time_submitted(time_entries):
 def is_time_only_saved(time_entries):
     if len(time_entries) < 1:
         return False
-    time_entry = time_entries[get_json_key_by_index(time_entries, 0)]
+    time_entry = time_entries[utilities.get_json_key_by_index(time_entries, 0)]
     if len(time_entries) > 1 and time_entry["isPendingApprovalFlag"] == "F":
         return True
     if "hours" in time_entry and time_entry["hours"] != "" and \
@@ -241,40 +259,40 @@ def submit_time(user_session_id, payload):
     request = cur_session.get(formatted_session_validation_url)
     validation_page = BeautifulSoup(request.content, "html.parser")
     if validation_page.text.strip() != "true":
-        log_error("Cannot submit the timesheet. Session expired.")
+        logs.log_error("Cannot submit the timesheet. Session expired.")
     else:
         formatted_netsuite_timesheet_url = netsuite_timesheet_url.format(user_session_id=user_session_id, date="")
         headers = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
                           "Chrome/90.0.4430.93 Safari/537.36",
         }
-        data = {"submittedData": prettify_json(payload)}
+        data = {"submittedData": utilities.prettify_json(payload)}
         if DEV_MODE:
-            log_info("Payload: \n" + prettify_json(payload, True))
-            log_warning("Dev Mode: Time is NOT submitted.")
+            logs.log_info("Payload: \n" + utilities.prettify_json(payload, True))
+            logs.log_warning("Dev Mode: Time is NOT submitted.")
         else:
             result = cur_session.post(formatted_netsuite_timesheet_url, headers=headers, data=data)
 
-            log(SMALL_SEPARATOR)
+            logs.log(SMALL_SEPARATOR)
             if result.status_code == 200:
-                log_success("Time submitted successfully!")
+                logs.log_success("Time submitted successfully!")
             else:
-                log_error("Error while submitting the timesheet.")
+                logs.log_error("Error while submitting the timesheet.")
 
 
 def scrape():
     if DEV_MODE:
-        log_warning("Dev mode is enabled.")
+        logs.log_warning("Dev mode is enabled.")
 
     user_session_id = authenticate_with_retries()
     if user_session_id is not None:
-        log_success("Login successful.")
-        log(SMALL_SEPARATOR)
+        logs.log_success("Login successful.")
+        logs.log(SMALL_SEPARATOR)
 
-        date = get_previous_working_date().strftime("%Y/%m/%d")
+        date = utilities.get_previous_working_date().strftime("%Y/%m/%d")
         # Dev test custom date
         # date = datetime.datetime(2021, 5, 1).strftime("%Y/%m/%d")
-        log_info("Getting the Netsuite timeSheet page for: " + date)
+        logs.log_info("Getting the Netsuite timeSheet page for: " + date)
         formatted_netsuite_timesheet_url = netsuite_timesheet_url.format(user_session_id=user_session_id, date=date)
         request = cur_session.get(formatted_netsuite_timesheet_url)
         netsuite_page = BeautifulSoup(request.content, "html.parser")
@@ -285,27 +303,27 @@ def scrape():
 
         time_sheet_page = netsuite_page.find("body", {"id": "timeSheetPage"})
         if time_sheet_page:
-            log_info("Finding the data in the page.")
+            logs.log_info("Finding the data in the page.")
             script_text = time_sheet_page.find("script", {"src": False}).string.strip()
             if script_text:
-                log_info("Parsing the time entries data.")
-                time_entries = json.loads(get_js_var("timeEntries", script_text))
+                logs.log_info("Parsing the time entries data.")
+                time_entries = json.loads(utilities.get_js_var("timeEntries", script_text))
                 if time_entries:
-                    log_success("Data extraction successful.")
-                    log(SMALL_SEPARATOR)
-                    log_info("NetsuiteBot detecting action to take...")
+                    logs.log_success("Data extraction successful.")
+                    logs.log(SMALL_SEPARATOR)
+                    logs.log_info("NetsuiteBot detecting action to take...")
                     if is_time_submitted(time_entries):
-                        log_success("Time already submitted.")
+                        logs.log_success("Time already submitted.")
                     elif is_time_only_saved(time_entries):
-                        log_info("Time already saved. Submitting time...")
+                        logs.log_info("Time already saved. Submitting time...")
                         for entry in time_entries:
                             time_entries[entry]["isPendingApprovalFlag"] = "T"
                             time_entries[entry]["projectIsClosed"] = "F"
                         submit_time(user_session_id, time_entries)
                     else:
-                        log_info("No existing time entry.")
-                        log_info("Creating a new time entry. Submitting time...")
-                        key = get_json_key_by_index(time_entries, 0)
+                        logs.log_info("No existing time entry.")
+                        logs.log_info("Creating a new time entry. Submitting time...")
+                        key = utilities.get_json_key_by_index(time_entries, 0)
                         time_entries[key]["task"] = config.get("Informations", "Task")
                         time_entries[key]["hours"] = config.get("Informations", "Time")
                         time_entries[key]["comment"] = config.get("Informations", "Comment").replace('"', '\"')
@@ -314,22 +332,22 @@ def scrape():
                         time_entries[key]["projectIsClosed"] = "F"
                         submit_time(user_session_id, time_entries)
                 else:
-                    log_error("No time entries found.")
+                    logs.log_error("No time entries found.")
             else:
-                log_error("Error while trying to parse the script.")
+                logs.log_error("Error while trying to parse the script.")
         else:
             error_msg = "Error while trying to load the Netsuite timeSheet page."
             page_title = netsuite_page.find("title").text
             if page_title:
                 error_msg += "\nWe're on page titled: " + page_title
-            log_error(error_msg)
+            logs.log_error(error_msg)
     else:
-        log_error("Failed to create user session id.")
+        logs.log_error("Failed to create user session id.")
 
 
 if __name__ == "__main__":
     printLogo()
-    log(SEPARATOR)
+    logs.log(SEPARATOR)
 
     config = configparser.ConfigParser()
     cur_session = requests.Session()
