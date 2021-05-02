@@ -1,0 +1,11 @@
+.idea
+__pycache__
+build
+venv
+
+# Dev
+configs.ini
+cookies.txt
+cron.log
+line.select
+src/payloads
