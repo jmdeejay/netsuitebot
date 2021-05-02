@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set e;
+set -e;
 
 # Get source real dir: Upstreams symlinks.
 SOURCE="${BASH_SOURCE[0]}";
@@ -67,7 +67,7 @@ uninstall () {
 update () {
   if netsuitebot_is_installed; then
     cd "$CUR_DIR" || echo "Error when updating.";
-    git pull;
+    git pull --ff-only;
     cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
     cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
     echo "$APP_NAME successfully updated";
