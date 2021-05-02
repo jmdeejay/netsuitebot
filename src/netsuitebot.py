@@ -277,12 +277,12 @@ def scrape():
         log_info("Getting the Netsuite timeSheet page for: " + date)
         formatted_netsuite_timesheet_url = netsuite_timesheet_url.format(user_session_id=user_session_id, date=date)
         request = cur_session.get(formatted_netsuite_timesheet_url)
+        netsuite_page = BeautifulSoup(request.content, "html.parser")
 
         # Dev: Test local pages
-        # with open("src/payloads/netsuite/loggedin_landing_page_saved.html") as fp:
+        # with open("tmp/payloads/netsuite/loggedin_landing_page_saved.html") as fp:
         #     netsuite_page = BeautifulSoup(fp, 'html.parser')
 
-        netsuite_page = BeautifulSoup(request.content, "html.parser")
         time_sheet_page = netsuite_page.find("body", {"id": "timeSheetPage"})
         if time_sheet_page:
             log_info("Finding the data in the page.")

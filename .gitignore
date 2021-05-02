@@ -8,4 +8,4 @@ configs.ini
 cookies.txt
 cron.log
 line.select
-src/payloads
+tmp
