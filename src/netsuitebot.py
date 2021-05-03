@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 # Standard library imports
+# import datetime # Dev
 import json
 import os
 import re
@@ -236,7 +237,8 @@ def is_time_submitted(time_entries):
         return False
 
     time_entry = time_entries[utilities.get_json_key_by_index(time_entries, 0)]
-    if "isPendingApprovalFlag" in time_entry and time_entry["isPendingApprovalFlag"] == "T":
+    if ("isPendingApprovalFlag" in time_entry and time_entry["isPendingApprovalFlag"] == "T") or \
+            ("isApprovedFlag" in time_entry and time_entry["isApprovedFlag"] == "T"):
         return True
     return False
 
@@ -291,7 +293,8 @@ def scrape():
 
         date = utilities.get_previous_working_date().strftime("%Y/%m/%d")
         # Dev test custom date
-        # date = datetime.datetime(2021, 5, 1).strftime("%Y/%m/%d")
+        # date = datetime.datetime(2021, 5, 3).strftime("%Y/%m/%d")
+
         logs.log_info("Getting the Netsuite timeSheet page for: " + date)
         formatted_netsuite_timesheet_url = netsuite_timesheet_url.format(user_session_id=user_session_id, date=date)
         request = cur_session.get(formatted_netsuite_timesheet_url)
@@ -348,7 +351,9 @@ def scrape():
 if __name__ == "__main__":
     printLogo()
     logs.log(SEPARATOR)
+    logs.log_info(TITLE + " started.")
 
     config = configparser.ConfigParser()
     cur_session = requests.Session()
     scrape()
+    logs.log_info(TITLE + " finished.")
