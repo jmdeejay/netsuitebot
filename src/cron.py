@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Standard library imports
 import getpass
@@ -35,7 +35,7 @@ def uninstall_cron():
 
 if __name__ == "__main__":
     if len(sys.argv) < 4 or sys.argv[1] not in ["install", "uninstall"]:
-        print("Usage: python3 ./cron.py ACTION FILEPATH FILENAME")
+        print("Usage: pipenv run python ./cron.py ACTION FILEPATH FILENAME")
         print("ACTION [install | uninstall]")
         exit()
 

@@ -14,7 +14,7 @@ mkdir -p "$imageFilepath";
 cp "./src/$imageFileName" "$imageFilepath";
 
 # --clean to clear cache
-pyinstaller --onefile "./src/$fileName.py" --noconfirm --name "$AppName" \
+pipenv run pyinstaller --onefile "./src/$fileName.py" --noconfirm --noupx --name "$AppName" \
             --paths "./src/" \
             --hidden-import="PIL._tkinter_finder" \
             --add-data "$imageFileName:./src/" \

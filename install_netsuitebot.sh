@@ -44,7 +44,7 @@ install () {
     cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
     echo "$APP_NAME successfully installed";
     # Install cronjob
-    python3 "$CUR_DIR/src/cron.py" "install" "$BASE_PATH" "$BOT_FILENAME";
+    pipenv run python "$CUR_DIR/src/cron.py" "install" "$BASE_PATH" "$BOT_FILENAME";
     # Execute Configurator
     cd "$BASE_PATH" && ./$CONFIGURATOR_FILENAME &> /dev/null &
   fi
@@ -55,7 +55,7 @@ uninstall () {
     echo "$APP_NAME is already uninstalled";
   else
     # Uninstall cronjob
-    python3 "$CUR_DIR/src/cron.py" "uninstall" "$BASE_PATH" "$BOT_FILENAME";
+    pipenv run python "$CUR_DIR/src/cron.py" "uninstall" "$BASE_PATH" "$BOT_FILENAME";
     rm -f "$BASE_PATH/$CONFIGURATOR_FILENAME";
     rm -f "$BASE_PATH/$BOT_FILENAME";
     rm -f "$BASE_PATH/configs.ini";

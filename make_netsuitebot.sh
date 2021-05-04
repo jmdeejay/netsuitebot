@@ -8,6 +8,6 @@ AppName="NetsuiteBot";
 fileName="netsuitebot";
 
 # --clean to clear cache
-pyinstaller --onefile "./src/$fileName.py" --noconfirm --name "$AppName" \
+pipenv run pyinstaller --onefile "./src/$fileName.py" --noconfirm --noupx --name "$AppName" \
             --paths './src/' \
             --specpath "./build/$AppName/$fileName.spec";

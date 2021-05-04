@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+pycodestyle = "*"
+flake8 = "*"
+line-counter = "*"
+
+[packages]
+bs4 = "0.0.1"
+configparser = "5.0.2"
+pyinstaller = "4.3"
+python-crontab = "2.5.1"
+pillow = "8.2.0"
+requests = "2.25.1"
+tk = "0.1.0"
+
+[requires]
+python_version = "3.8.3"

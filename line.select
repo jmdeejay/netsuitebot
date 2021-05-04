@@ -1,0 +1,10 @@
+# Select rules:
+*.py
+*.sh
+*.md
+
+# Ignore rules:
+!build
+!dist
+!venv
+!tmp
