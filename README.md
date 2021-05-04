@@ -15,6 +15,7 @@ NetsuiteBot allows you to always enter your Netsuite time on time.
   (You can always execute it manually by double-clicking the Configurator executable)
 
 - Enter & save your configurations.
+  
   Test your login information (make sure everything works)
 
 > **_!Important:_**  The bot cannot work properly without proper configurations entered & saved.
@@ -55,7 +56,7 @@ At runtime, the bot will check the previous working day & it will either:
 ---
 
 ## Pre-requisites
-- python3
+- python3.8
 
 ## Required python packages
 - beautifulsoup4
@@ -79,5 +80,14 @@ At runtime, the bot will check the previous working day & it will either:
   ```
   ./make_netsuitebot.bash
   ```
-- The code is pycodestyle (PEP8 if you use Pycharm) & Flake8 compliant.
-  You may run either of these linters.
+- The code is pycodestyle (PEP8 if you use Pycharm) & Flake8 compliant. 
+  
+  To install:
+  ```
+  python3 -m pip install flake8
+  ```
+  To run the linters:
+  ```
+  flake8
+  pycodestyle
+  ```
