@@ -3,9 +3,26 @@
 
 NetsuiteBot allows you to always enter your Netsuite time on time.
 
+Disclaimer:
+This project is not intended to completely remove your habit of manually entering 
+your Netsuite time. It is more a helper for when you save your time entries but 
+forget to submit it or simply forget to create a time entry on time.
 ---
 
 ## Installation
+- Install the required python packages & create your virtual python environment with all the required packages.
+  ```
+  make install_requirements
+  ```
+  Once completed, you may setup PyCharm to use the created virtual environment, normally located:
+  `~/.local/share/virtualenvs/netsuitebot-********`
+
+
+- Compile the NetsuiteBot applications.
+  ```
+  make compile_applications
+  ```
+
 - Install NetsuiteBot.
   ```
   make install_netsuitebot
@@ -13,6 +30,7 @@ NetsuiteBot allows you to always enter your Netsuite time on time.
   
   Configurator should be executed automatically at the end of the installation.
   (You can always execute it manually by double-clicking the Configurator executable)
+
 
 - Enter & save your configurations.
   
@@ -67,22 +85,6 @@ At runtime, the bot will check the previous working day & it will either:
 - pyinstaller
 - requests
 - tkinter
-
-## Development
-- Install the required python packages & create your virtual python environment with all the required packages.
-  ```
-  make install_requirements
-  ```
-  Once completed, you may setup PyCharm to use the created virtual environment, normally located:
-  `~/.local/share/virtualenvs/netsuitebot-********`
-- Create the NetsuiteBot configurator application in "./dist/Configurator".
-  ```
-  make configurator
-  ```
-- Create the NetsuiteBot scraper application in "./dist/NetsuiteBot".
-  ```
-  make netsuitebot
-  ```
   
 ## Development tools
 - Install the required dev packages.
@@ -90,9 +92,14 @@ At runtime, the bot will check the previous working day & it will either:
   make install_dev_requirements
   ```
 - The code is pycodestyle (PEP8 if you use Pycharm) & Flake8 compliant.
+  You can test code linting & styling by running:
   ```
   make code_lint
   make code_style
+  ```
+- The code is properly typed. You can test type checking by running:
+  ```
+  make type_check
   ```
 - To output projects stats:
   ```

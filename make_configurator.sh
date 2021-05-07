@@ -21,5 +21,3 @@ pipenv run pyinstaller --onefile "./src/$fileName.py" --noconfirm --noupx --name
             --specpath "./build/$AppName/$fileName.spec";
 
 mv "./dist/$AppName" "./dist/$AppName.appimage";
-# Execute generated executable
-./dist/$AppName.appimage;

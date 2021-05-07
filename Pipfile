@@ -4,9 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-pycodestyle = "*"
 flake8 = "*"
 line-counter = "*"
+pycodestyle = "*"
+pytype = "*"
 
 [packages]
 bs4 = "0.0.1"
