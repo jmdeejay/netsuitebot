@@ -5,10 +5,10 @@ NetsuiteBot allows you to always enter your Netsuite time on time.
 
 ---
 
-## Usage
+## Installation
 - Install NetsuiteBot.
   ```
-  ./install_netsuitebot.sh
+  make install_netsuitebot
   ```
   
   Configurator should be executed automatically at the end of the installation.
@@ -22,18 +22,18 @@ NetsuiteBot allows you to always enter your Netsuite time on time.
 
 To uninstall NetsuiteBot simply run:
 ```
-./install_netsuitebot.sh --remove
+make uninstall_netsuitebot
 ```
 
 To update NetsuiteBot simply run:
 ```
-./install_netsuitebot.sh --update
+make update_netsuitebot
 ```
 
 ## Specifications
 ### Cronjob
-When running the `install_netsuitebot.sh` script, a cronjob is automatically created for you.
-NetsuiteBot will run every weekday @ 11:30am.
+When installing NetsuiteBot, a cronjob is automatically created for you.
+The job will then run every weekday @ 11:30am.
 You can verify its existence by running: `crontab -e`
 
 There should be a cronjob similar to this:
@@ -43,7 +43,7 @@ There should be a cronjob similar to this:
 ```
 
 ### Bot
-NetsuiteBot will pop up the Configurator if there is invalid configurations or if he is unable to login with the credentials provided.
+NetsuiteBot will pop up the Configurator if there are invalid configurations or if he is unable to login with the credentials provided.
 There will be 3 retries before closing completely & aborting the time submission.
 
 NetsuiteBot will be smart when he submits your Netsuite timesheet.
@@ -56,7 +56,8 @@ At runtime, the bot will check the previous working day & it will either:
 ---
 
 ## Pre-requisites
-- python3.8
+- asdf
+- python 3.8.3
 
 ## Required python packages
 - beautifulsoup4
@@ -68,26 +69,32 @@ At runtime, the bot will check the previous working day & it will either:
 - tkinter
 
 ## Development
-- Install the required python packages.
+- Install the required python packages & create your virtual python environment with all the required packages.
   ```
-  ./install_requirements.sh
+  make install_requirements
   ```
+  Once completed, you may setup PyCharm to use the created virtual environment, normally located:
+  `~/.local/share/virtualenvs/netsuitebot-********`
 - Create the NetsuiteBot configurator application in "./dist/Configurator".
   ```
-  ./make_configurator.bash
+  make configurator
   ```
 - Create the NetsuiteBot scraper application in "./dist/NetsuiteBot".
   ```
-  ./make_netsuitebot.bash
+  make netsuitebot
   ```
-- The code is pycodestyle (PEP8 if you use Pycharm) & Flake8 compliant. 
   
-  To install:
+## Development tools
+- Install the required dev packages.
   ```
-  python3 -m pip install flake8
+  make install_dev_requirements
   ```
-  To run the linters:
+- The code is pycodestyle (PEP8 if you use Pycharm) & Flake8 compliant.
   ```
-  flake8
-  pycodestyle
+  make code_lint
+  make code_style
+  ```
+- To output projects stats:
+  ```
+  make count_lines
   ```

@@ -5,11 +5,11 @@
 __pycache__
 _tmp
 build
+dist
 venv
 
 # Dev
 configs.ini
 cookies.txt
 cron.log
-line.select
 tmp

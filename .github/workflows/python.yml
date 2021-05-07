@@ -1,0 +1,32 @@
+name: Python
+
+on: [push]
+
+jobs:
+  Check-Code-Style-Linting:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest pycodestyle
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --exclude=.git,.idea,__pycache__,_tmp,venv,build,dist,tmp --statistics
+      - name: Code style with pycodestyle
+        run: |
+          pycodestyle . --count --exclude=.git,.idea,venv,build,dist,tmp --max-line-length=120 --show-source --statistics
+      - name: Test with pytest (No tests yet)
+        run: |
+      #    pytest
+      - run: echo "Job's status is ${{ job.status }}."

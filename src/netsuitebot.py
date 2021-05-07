@@ -1,7 +1,7 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 # Standard library imports
-# import datetime # Dev
+import datetime
 import json
 import os
 import re
@@ -103,7 +103,7 @@ def executeConfigurator():
     else:  # Dev use only
         app_name = "configurator.py"
         app_path = os.path.join(os.path.abspath("."), "")
-        os.system("cd \"" + app_path + "\" && python3 ./src/" + app_name)
+        os.system("cd \"" + app_path + "\" && pipenv run python ./src/" + app_name)
 
 
 def try_login(email, password, req=None):
@@ -295,7 +295,7 @@ def scrape():
         # Dev test custom date
         # date = datetime.datetime(2021, 5, 3).strftime("%Y/%m/%d")
 
-        logs.log_info("Getting the Netsuite timeSheet page for: " + date)
+        logs.log_info("Getting the Netsuite timeSheet page entries on the: " + date)
         formatted_netsuite_timesheet_url = netsuite_timesheet_url.format(user_session_id=user_session_id, date=date)
         request = cur_session.get(formatted_netsuite_timesheet_url)
         netsuite_page = BeautifulSoup(request.content, "html.parser")
@@ -351,9 +351,9 @@ def scrape():
 if __name__ == "__main__":
     printLogo()
     logs.log(SEPARATOR)
-    logs.log_info(TITLE + " started.")
+    logs.log_info(TITLE + " started: " + datetime.datetime.today().strftime("%Y/%m/%d %H:%M:%S"))
 
     config = configparser.ConfigParser()
     cur_session = requests.Session()
     scrape()
-    logs.log_info(TITLE + " finished.")
+    logs.log_info(TITLE + " finished: " + datetime.datetime.today().strftime("%Y/%m/%d %H:%M:%S"))
