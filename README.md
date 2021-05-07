@@ -10,13 +10,16 @@ forget to submit it or simply forget to create a time entry on time.
 ---
 
 ## Installation
+- Make sure you have asdf already installed.
+
+
 - Install the required python packages & create your virtual python environment with all the required packages.
   ```
   make install_requirements
   ```
   Once completed, you may setup PyCharm to use the created virtual environment, normally located:
   `~/.local/share/virtualenvs/netsuitebot-********`
-
+  
 
 - Compile the NetsuiteBot applications.
   ```

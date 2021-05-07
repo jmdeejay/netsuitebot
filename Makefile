@@ -5,6 +5,11 @@ SHELL := /bin/bash
 CHECK_PLUGIN_LIST = $(shell asdf plugin list | grep "python")
 GET_PLUGIN_LIST = $(eval LIST_CONTENT=$(CHECK_PLUGIN_LIST))
 install_requirements:
+	@if [[ "$(uname)" == 'Darwin' ]]; then \
+      echo "Install Mac dependencies"; \
+    else \
+      sudo apt-get install --no-install-recommends make build-essential wget curl tk-dev python-tk python3-tk; \
+    fi
 	$(GET_PLUGIN_LIST)
 	@if [[ $(LIST_CONTENT) == "python" ]]; then \
   		asdf plugin update python; \
