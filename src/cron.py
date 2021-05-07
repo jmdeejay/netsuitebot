@@ -52,7 +52,7 @@ if __name__ == "__main__":
         exit()
 
     cron = CronTab(user=getpass.getuser())
-    cmd = "export DISPLAY=:0; cd \"" + filepath + "\" && ./" + filename + " > ./cron.log 2>&1"
+    cmd = "export DISPLAY=:0; cd \"" + filepath + "\" && pipenv run python ./" + filename + " > ./cron.log 2>&1"
     comment = "NetsuiteBot scheduled job"
 
     if action == "install":

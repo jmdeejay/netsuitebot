@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5fc6ec33ac39223ab436a3b899bbf27864ab1165ea1108202f26d95081044b30"
+            "sha256": "5129e8aa4b1344de046f019f3372e3e27e207ad83cabaedb5b9576d57befd9cc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,13 +16,6 @@
         ]
     },
     "default": {
-        "altgraph": {
-            "hashes": [
-                "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa",
-                "sha256:c623e5f3408ca61d4016f23a681b9adb100802ca3e3da5e718915a9e4052cebe"
-            ],
-            "version": "==0.17"
-        },
         "beautifulsoup4": {
             "hashes": [
                 "sha256:4c98143716ef1cb40bf7f39a8e3eec8f8b009509e74904ba3a7b315431577e35",
@@ -107,20 +100,6 @@
             ],
             "index": "pypi",
             "version": "==8.2.0"
-        },
-        "pyinstaller": {
-            "hashes": [
-                "sha256:5ecf8bbc230d7298a796e52bb745b95eee12878d141f1645612c99246ecd23f2"
-            ],
-            "index": "pypi",
-            "version": "==4.3"
-        },
-        "pyinstaller-hooks-contrib": {
-            "hashes": [
-                "sha256:27558072021857d89524c42136feaa2ffe4f003f1bdf0278f9b24f6902c1759c",
-                "sha256:892310e6363655838485ee748bf1c5e5cade7963686d9af8650ee218a3e0b031"
-            ],
-            "version": "==2021.1"
         },
         "python-crontab": {
             "hashes": [

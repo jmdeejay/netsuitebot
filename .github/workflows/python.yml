@@ -21,11 +21,11 @@ jobs:
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --exclude=.git,.idea,__pycache__,_tmp,venv,build,dist,tmp --statistics
+          flake8 . --count --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
       - name: Code style with pycodestyle
         run: |
-          pycodestyle . --count --exclude=.git,.idea,venv,build,dist,tmp --max-line-length=120 --show-source --statistics
+          pycodestyle . --count --max-line-length=120 --show-source --statistics
       - name: Test with pytest (No tests yet)
         run: |
       #    pytest

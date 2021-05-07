@@ -6,13 +6,21 @@ NetsuiteBot allows you to always enter your Netsuite time on time.
 ---
 
 ## Installation
+- Install the required python packages & create your virtual python environment with all the required packages.
+  ```
+  make install_requirements
+  ```
+  Once completed, you may setup PyCharm to use the created virtual environment, normally located:
+  `~/.local/share/virtualenvs/netsuitebot-********`
+  
+
 - Install NetsuiteBot.
   ```
   make install_netsuitebot
   ```
   
   Configurator should be executed automatically at the end of the installation.
-  (You can always execute it manually by double-clicking the Configurator executable)
+  
 
 - Enter & save your configurations.
   
@@ -64,26 +72,9 @@ At runtime, the bot will check the previous working day & it will either:
 - configparser
 - crontab
 - pillow
-- pyinstaller
 - requests
 - tkinter
 
-## Development
-- Install the required python packages & create your virtual python environment with all the required packages.
-  ```
-  make install_requirements
-  ```
-  Once completed, you may setup PyCharm to use the created virtual environment, normally located:
-  `~/.local/share/virtualenvs/netsuitebot-********`
-- Create the NetsuiteBot configurator application in "./dist/Configurator".
-  ```
-  make configurator
-  ```
-- Create the NetsuiteBot scraper application in "./dist/NetsuiteBot".
-  ```
-  make netsuitebot
-  ```
-  
 ## Development tools
 - Install the required dev packages.
   ```

@@ -17,10 +17,9 @@ readonly BLUE='\033[0;34m';
 readonly NC='\033[0m';
 readonly APP_NAME="NetsuiteBot";
 readonly COLORED_APP_NAME="${BLUE}Netsuite${NC}${RED}Bot${NC}";
-readonly CUR_DIR="$DIR";
-readonly BASE_PATH="$HOME/netsuitebot";
-readonly CONFIGURATOR_FILENAME="Configurator.appimage";
-readonly BOT_FILENAME="NetsuiteBot";
+readonly BASE_PATH="$DIR";
+readonly CONFIGURATOR_FILENAME="configurator.py";
+readonly BOT_FILENAME="netsuitebot.py";
 
 printHelp () {
   echo -e "This script will install $COLORED_APP_NAME and its cron.
@@ -31,49 +30,26 @@ Options
   -u | --update Update $APP_NAME.";
 }
 
-netsuitebot_is_installed () {
-    [[ -f "$BASE_PATH/$CONFIGURATOR_FILENAME" && -f "$BASE_PATH/$BOT_FILENAME" ]];
-}
-
 install () {
-  if netsuitebot_is_installed; then
-    echo "$APP_NAME is already installed";
-  else
-    mkdir -p "$BASE_PATH/";
-    cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
-    cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
-    echo "$APP_NAME successfully installed";
-    # Install cronjob
-    pipenv run python "$CUR_DIR/src/cron.py" "install" "$BASE_PATH" "$BOT_FILENAME";
-    # Execute Configurator
-    cd "$BASE_PATH" && ./$CONFIGURATOR_FILENAME &> /dev/null &
-  fi
+  # Install cronjob
+  pipenv run python "$BASE_PATH/src/cron.py" "install" "$BASE_PATH/src/" "$BOT_FILENAME";
+  echo "$APP_NAME successfully installed";
+  # Execute Configurator
+  cd "$BASE_PATH" && pipenv run python ./src/$CONFIGURATOR_FILENAME &> /dev/null &
 }
 
 uninstall () {
-  if ! netsuitebot_is_installed; then
-    echo "$APP_NAME is already uninstalled";
-  else
-    # Uninstall cronjob
-    pipenv run python "$CUR_DIR/src/cron.py" "uninstall" "$BASE_PATH" "$BOT_FILENAME";
-    rm -f "$BASE_PATH/$CONFIGURATOR_FILENAME";
-    rm -f "$BASE_PATH/$BOT_FILENAME";
-    rm -f "$BASE_PATH/configs.ini";
-    rm -f "$BASE_PATH/cron.log";
-    echo "$APP_NAME uninstalled";
-  fi
+  # Uninstall cronjob
+  pipenv run python "$BASE_PATH/src/cron.py" "uninstall" "$BASE_PATH/src/" "$BOT_FILENAME";
+  rm -f "$BASE_PATH/configs.ini";
+  rm -f "$BASE_PATH/cron.log";
+  echo "$APP_NAME uninstalled";
 }
 
 update () {
-  if netsuitebot_is_installed; then
-    cd "$CUR_DIR" || echo "Error when updating.";
-    git pull --ff-only;
-    cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
-    cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
-    echo "$APP_NAME successfully updated";
-  else
-    echo "$APP_NAME does not seem to be installed. Install it before updating.";
-  fi
+  cd "$BASE_PATH" || echo "Error when updating.";
+  git pull --ff-only;
+  echo "$APP_NAME successfully updated";
 }
 
 if [[ $1 == "-h" || $1 == "--help" ]]; then # Help

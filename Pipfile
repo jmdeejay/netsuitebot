@@ -11,7 +11,6 @@ line-counter = "*"
 [packages]
 bs4 = "0.0.1"
 configparser = "5.0.2"
-pyinstaller = "4.3"
 python-crontab = "2.5.1"
 pillow = "8.2.0"
 requests = "2.25.1"
