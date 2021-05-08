@@ -7,6 +7,7 @@ Disclaimer:
 This project is not intended to completely remove your habit of manually entering 
 your Netsuite time. It is more a helper for when you save your time entries but 
 forget to submit it or simply forget to create a time entry on time.
+
 ---
 
 ## Installation
@@ -50,6 +51,8 @@ To update NetsuiteBot simply run:
 ```
 make update_netsuitebot
 ```
+
+---
 
 ## Specifications
 ### Cronjob
