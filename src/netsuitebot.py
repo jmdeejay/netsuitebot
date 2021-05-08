@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding: utf8
 
 # Standard library imports
 import datetime
