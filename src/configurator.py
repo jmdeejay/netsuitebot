@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# coding: utf8
 
 # Standard library imports
 import os
@@ -19,7 +20,7 @@ import classes.utilities as utilities
 from netsuitebot import try_login
 
 # Consts
-VERSION = "1.0"
+VERSION = "1.1"
 TITLE = "NetsuiteBot configurator"
 CONFIG_FILE = "configs.ini"
 

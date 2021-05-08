@@ -15,11 +15,10 @@ cp "./src/$imageFileName" "$imageFilepath";
 
 # --clean to clear cache
 pipenv run pyinstaller --onefile "./src/$fileName.py" --noconfirm --noupx --name "$AppName" \
+            --icon './resources/configurator_logo.ico' \
             --paths "./src/" \
             --hidden-import="PIL._tkinter_finder" \
             --add-data "$imageFileName:./src/" \
             --specpath "./build/$AppName/$fileName.spec";
 
 mv "./dist/$AppName" "./dist/$AppName.appimage";
-# Execute generated executable
-./dist/$AppName.appimage;

@@ -31,6 +31,10 @@ Options
   -u | --update Update $APP_NAME.";
 }
 
+netsuitebot_is_compiled () {
+    [[ -f "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" && -f "$CUR_DIR/dist/$BOT_FILENAME" ]];
+}
+
 netsuitebot_is_installed () {
     [[ -f "$BASE_PATH/$CONFIGURATOR_FILENAME" && -f "$BASE_PATH/$BOT_FILENAME" ]];
 }
@@ -39,14 +43,19 @@ install () {
   if netsuitebot_is_installed; then
     echo "$APP_NAME is already installed";
   else
-    mkdir -p "$BASE_PATH/";
-    cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
-    cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
-    echo "$APP_NAME successfully installed";
-    # Install cronjob
-    pipenv run python "$CUR_DIR/src/cron.py" "install" "$BASE_PATH" "$BOT_FILENAME";
-    # Execute Configurator
-    cd "$BASE_PATH" && ./$CONFIGURATOR_FILENAME &> /dev/null &
+    if netsuitebot_is_compiled; then
+      mkdir -p "$BASE_PATH/";
+      cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
+      cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
+      echo "$APP_NAME successfully installed";
+      # Install cronjob
+      pipenv run python "$CUR_DIR/src/cron.py" "install" "$BASE_PATH" "$BOT_FILENAME";
+      # Execute Configurator
+      cd "$BASE_PATH" && ./$CONFIGURATOR_FILENAME &> /dev/null &
+    else
+      echo -e "${RED}[Error]${NC}: Compiled applications missing."
+      echo "Run \`make compile_applications\` before trying to install."
+    fi
   fi
 }
 
@@ -68,6 +77,8 @@ update () {
   if netsuitebot_is_installed; then
     cd "$CUR_DIR" || echo "Error when updating.";
     git pull --ff-only;
+	  make configurator;
+    make netsuitebot;
     cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
     cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
     echo "$APP_NAME successfully updated";
