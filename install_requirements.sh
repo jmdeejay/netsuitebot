@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! command -v asdf &> /dev/null; then
+    echo "[Error] Make sure asdf is installed before trying to run the inital setup.";
+    exit;
+fi
+
 LIST_CONTENT=$(asdf plugin list | grep "python");
 if [[ "$(uname)" == 'Darwin' ]]; then
   xcode-select --install;

@@ -77,7 +77,7 @@ update () {
   if netsuitebot_is_installed; then
     cd "$CUR_DIR" || echo "Error when updating.";
     git pull --ff-only;
-	  make configurator;
+    make configurator;
     make netsuitebot;
     cp "$CUR_DIR/dist/$CONFIGURATOR_FILENAME" "$BASE_PATH/$CONFIGURATOR_FILENAME";
     cp "$CUR_DIR/dist/$BOT_FILENAME" "$BASE_PATH/$BOT_FILENAME";
