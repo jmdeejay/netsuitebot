@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if ! command -v asdf &> /dev/null; then
-    echo "[Error] Make sure asdf is installed before trying to run the inital setup.";
+    echo "[Error] Make sure asdf is installed before trying to run the initial setup.";
     exit;
 fi
 
@@ -15,13 +15,10 @@ if [[ "$(uname)" == 'Darwin' ]]; then
   else
 		asdf plugin add python;
 	fi
-	env \
-	PATH="$(brew --prefix tcl-tk)/bin:$PATH" \
-	LDFLAGS="-L$(brew --prefix tcl-tk)/lib" \
-	CPPFLAGS="-I$(brew --prefix tcl-tk)/include" \
-	PKG_CONFIG_PATH="$(brew --prefix tcl-tk)/lib/pkgconfig" \
+	env PATH="$(brew --prefix tcl-tk)/bin:$PATH" LDFLAGS="-L$(brew --prefix tcl-tk)/lib" \
+	CPPFLAGS="-I$(brew --prefix tcl-tk)/include" PKG_CONFIG_PATH="$(brew --prefix tcl-tk)/lib/pkgconfig" \
 	CFLAGS="-I$(brew --prefix tcl-tk)/include" \
-	PYTHON_CONFIGURE_OPTS="--enable-framework --with-tcltk-includes='-I$(brew --prefix tcl-tk)/include' --with-tcltk-libs='-L$(brew --prefix tcl-tk)/lib -ltcl8.6 -ltk8.6'";
+	PYTHON_CONFIGURE_OPTS="--enable-framework --with-tcltk-includes='-I$(brew --prefix tcl-tk)/include' --with-tcltk-libs='-L$(brew --prefix tcl-tk)/lib -ltcl8.6 -ltk8.6'" \
 	asdf install;
 	asdf reshim;
 	pip install --upgrade pip;
@@ -36,7 +33,6 @@ else
 		asdf plugin add python;
 	fi
 	env PYTHON_CONFIGURE_OPTS="--enable-shared" asdf install;
-	asdf reshim;
 	pip install --upgrade pip;
 	pip install pipenv;
 	pipenv --python 3.8.3;
