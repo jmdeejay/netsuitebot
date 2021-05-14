@@ -19,7 +19,7 @@ def log(message, level=""):
     elif level != "":
         print("[{level}]: {message}".format(level=level, message=message))
     else:
-        print(message)
+        print("{message}".format(message=message))
 
 
 def log_info(message):

@@ -56,10 +56,8 @@ def printLogo():
     bt_line6 = bcolors.output("\____/  \_____/  \__|", BColors.RED)  # noqa: W605
     version = bcolors.output(VERSION, BColors.BOLD)
 
-    print(
-        ns_line1 + bt_line1 + ns_line2 + bt_line2 + ns_line3 + bt_line3 +
-        ns_line4 + bt_line4 + ns_line5 + bt_line5 + ns_line6 + bt_line6 + " " + version
-    )
+    logs.log(ns_line1 + bt_line1 + ns_line2 + bt_line2 + ns_line3 + bt_line3 +
+             ns_line4 + bt_line4 + ns_line5 + bt_line5 + ns_line6 + bt_line6 + " " + version)
     # @formatter:on
 
 
