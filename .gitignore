@@ -9,6 +9,10 @@ build
 dist
 venv
 
+# In case the project is cloned on the root.
+Configurator
+NetsuiteBot
+
 # Dev
 configs.ini
 cookies.txt

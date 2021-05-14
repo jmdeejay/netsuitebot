@@ -33,7 +33,7 @@ forget to submit it or simply forget to create a time entry on time.
   ```
   
   Configurator should be executed automatically at the end of the installation.
-  (You can always execute it manually by double-clicking the Configurator executable)
+  (You can always execute it manually by running the Configurator executable)
 
 
 - Enter & save your configurations.
@@ -87,6 +87,7 @@ At runtime, the bot will check the previous working day & it will either:
 - beautifulsoup4
 - configparser
 - crontab
+- macholib (Mac)
 - pillow
 - pyinstaller
 - requests

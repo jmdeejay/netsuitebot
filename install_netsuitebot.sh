@@ -19,7 +19,7 @@ readonly APP_NAME="NetsuiteBot";
 readonly COLORED_APP_NAME="${BLUE}Netsuite${NC}${RED}Bot${NC}";
 readonly CUR_DIR="$DIR";
 readonly BASE_PATH="$HOME/netsuitebot";
-readonly CONFIGURATOR_FILENAME="Configurator.appimage";
+readonly CONFIGURATOR_FILENAME="Configurator";
 readonly BOT_FILENAME="NetsuiteBot";
 
 printHelp () {
