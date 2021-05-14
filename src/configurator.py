@@ -44,10 +44,11 @@ def center(toplevel):
     toplevel.update_idletasks()
     screen_width = toplevel.winfo_screenwidth()
     screen_height = toplevel.winfo_screenheight()
-    size = tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
-    x = screen_width/2 - size[0]/2
-    y = screen_height/2 - size[1]/2
-    toplevel.geometry("+%d+%d" % (x, y))
+    width = toplevel.winfo_width()
+    height = toplevel.winfo_height()
+    x = screen_width/2 - width/2
+    y = screen_height/2 - height/2
+    toplevel.geometry(newGeometry="+%d+%d" % (x, y))
 
 
 def write_config_file():
