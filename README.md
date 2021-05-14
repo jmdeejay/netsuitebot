@@ -32,6 +32,10 @@ forget to submit it or simply forget to create a time entry on time.
   make install_netsuitebot
   ```
   
+  On Mac, because we are saving a cronjob, you may need to approve the change. Click Ok.
+  > "ApplicationXYZ" would like to administer your computer. Administration can include 
+  > modifying password, networking and system settings.
+
   Configurator should be executed automatically at the end of the installation.
   (You can always execute it manually by running the Configurator executable)
 
@@ -62,8 +66,7 @@ You can verify its existence by running: `crontab -e`
 
 There should be a cronjob similar to this:
 ```
-# NetsuiteBot scheduled job
-30 11 * * 1-5 export DISPLAY=:0; cd "/home/user/netsuitebot" && ./NetsuiteBot > ./cron.log 2>&1
+30 11 * * 1-5 export PYTHONIOENCODING=UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; export DISPLAY=:0; cd "/home/user/netsuitebot" && ./NetsuiteBot > ./cron.log 2>&1
 ```
 
 ### Bot
