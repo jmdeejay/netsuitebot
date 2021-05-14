@@ -30,6 +30,7 @@ def popup(title, value, timeout=0):
     popup_root.wm_title(title)
     popup_root.rowconfigure(1, minsize=50, weight=1)
     popup_root.columnconfigure(0, minsize=300, weight=1)
+    center(popup_root)
     if timeout > 0:
         popup_root.after(timeout, popup_root.destroy)
 
@@ -37,6 +38,16 @@ def popup(title, value, timeout=0):
     label.grid(row=0, column=0)
     popup_button = tk.Button(popup_root, text="Ok", command=popup_root.destroy)
     popup_button.grid(row=1, column=0)
+
+
+def center(toplevel):
+    toplevel.update_idletasks()
+    screen_width = toplevel.winfo_screenwidth()
+    screen_height = toplevel.winfo_screenheight()
+    size = tuple(int(_) for _ in toplevel.geometry().split('+')[0].split('x'))
+    x = screen_width/2 - size[0]/2
+    y = screen_height/2 - size[1]/2
+    toplevel.geometry("+%d+%d" % (x, y))
 
 
 def write_config_file():
@@ -207,4 +218,5 @@ if __name__ == "__main__":
     btn_save.grid(row=0, column=2, sticky="ew")
 
     open_config_file()
+    window.eval('tk::PlaceWindow . center')
     window.mainloop()
