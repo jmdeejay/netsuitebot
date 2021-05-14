@@ -98,7 +98,7 @@ def open_config_file():
 
 def executeConfigurator():
     if getattr(sys, "frozen", False):
-        app_name = "Configurator.appimage"
+        app_name = "Configurator"
         app_path = os.path.join(os.path.dirname(sys.executable), "")
         os.system("cd \"" + app_path + "\" && ./" + app_name)
     else:  # Dev use only

@@ -17,6 +17,7 @@ python-crontab = "2.5.1"
 pillow = "8.2.0"
 requests = "2.25.1"
 tk = "0.1.0"
+macholib = "1.14"
 
 [requires]
 python_version = "3.8.3"
