@@ -61,12 +61,12 @@ make update_netsuitebot
 ## Specifications
 ### Cronjob
 When installing NetsuiteBot, a cronjob is automatically created for you.
-The job will then run every weekday @ 11:30am.
+The job will then run every weekday @ 11:00am.
 You can verify its existence by running: `crontab -e`
 
 There should be a cronjob similar to this:
 ```
-30 11 * * 1-5 export PYTHONIOENCODING=UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; export DISPLAY=:0; cd "/home/user/netsuitebot" && ./NetsuiteBot > ./cron.log 2>&1
+0 11 * * 1-5 export PYTHONIOENCODING=UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; export DISPLAY=:0; cd "/home/user/netsuitebot" && ./NetsuiteBot > ./cron.log 2>&1
 ```
 
 ### Bot

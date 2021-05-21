@@ -22,7 +22,7 @@ def cron_exists():
 def install_cron():
     if not cron_exists():
         job = cron.new(command=cmd, comment=comment, pre_comment=True)
-        job.minute.on(30)
+        job.minute.on(0)
         job.hour.on(11)
         job.dow.during(1, 5)
         job.enable()
