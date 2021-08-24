@@ -20,7 +20,7 @@ import classes.utilities as utilities
 from netsuitebot import try_login
 
 # Consts
-VERSION = "1.1"
+VERSION = "1.2"
 TITLE = "NetsuiteBot configurator"
 CONFIG_FILE = "configs.ini"
 

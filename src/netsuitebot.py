@@ -22,7 +22,7 @@ import classes.tasks as tasks
 
 # Consts
 DEV_MODE = False
-VERSION = "1.1"
+VERSION = "1.2"
 TITLE = "NetsuiteBot"
 SEPARATOR = "════════════════════════════════════"
 SMALL_SEPARATOR = "────────────────────────────────────"

@@ -1,11 +1,26 @@
 # Global vars
-tasks_array = [
+"""
+# MC Projects
+mc_projects = [
     ["44073", "Team Passerelles"],
-    ["44075", "Team DevOps"],
     ["44076", "Mobile"],
-    ["44077", "Kronos IA"],
     ["47266", "RS&DE - Data Science"]
 ]
+"""
+# Max Projects
+max_projects = [
+    ["57605", "Team Passerelles"],
+    ["57606", "Mobile"],
+    ["57608", "RS&DE - Data Science"]
+]
+# Generic Projects
+generic_projects = [
+    ["44075", "Team DevOps"],
+    ["44077", "Kronos IA"],
+    ["55311", "Security Awareness Program"]
+]
+
+tasks_array = max_projects + generic_projects
 
 
 def get_default_task():
